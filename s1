@@ -1,0 +1,49 @@
+%{                                                                                                                                                     
+#include <stdio.h>                                                                                                                                     
+#include <stdlib.h>                                                                                                                                    
+#include <limits.h>                                                                                                                                    
+                                                                                                                                                       
+#define MAX_CHARS 256                                                                                                                                  
+                                                                                                                                                       
+int freq[MAX_CHARS] = {0};                                                                                                                             
+int min_freq = INT_MAX;                                                                                                                                
+int max_freq = 0;                                                                                                                                      
+%}                                                                                                                                                     
+                                                                                                                                                       
+%%                                                                                                                                                     
+                                                                                                                                                       
+.  { freq[yytext[0]]++;}                                                                                                                               
+                                                                                                                                                       
+                                                                                                                                                       
+.|\n          { }                                                                                                                                      
+                                                                                                                                                       
+%%                                                                                                                                                     
+                                                                                                                                                       
+int yywrap() {                                                                                                                                         
+    return 1;                                                                                                                                          
+}                                                                                                                                                      
+                                                                                                                                                       
+int main(int argc, char **argv) {                                                                                                                      
+    yylex();                                                                                                                                           
+    for (int i = 0; i < MAX_CHARS; i++) {                                                                                                              
+        if (freq[i] > 0) {                                                                                                                             
+            if (freq[i] > max_freq) {                                                                                                                  
+                max_freq = freq[i];                                                                                                                    
+            }                                                                                                                                          
+            if (freq[i] < min_freq) {                                                                                                                  
+                min_freq = freq[i];                                                                                                                    
+            }                                                                                                                                          
+        }                                                                                                                                              
+    }                                                                                                                                                  
+                                                                                                                                                       
+    printf("Character Frequencies:\n");                                                                                                                
+    for (int i = 0; i < MAX_CHARS; i++) {                                                                                                              
+        if (freq[i] > 0) {                                                                                                                             
+            printf("%c: %d\n", i, freq[i]);                                                                                                            
+        }                                                                                                                                              
+    }                                                                                                                                                  
+    printf("Maximum Frequency: %d\n", max_freq);                                                                                                       
+    printf("Minimum Frequency: %d\n", min_freq);                                                                                                       
+                                                                                                                                                       
+    return 0;                                                                                                                                          
+}  
